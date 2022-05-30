@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useContext} from 'react'
 import {Navbar, Nav, Container} from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
+import UserContext from '../contexts/UserContext'
 
 export default function AppNavbar() {
-    let [user, setUser] = useState(localStorage.getItem('user_email'))
+    const {user} = useContext(UserContext)
 
     return(
         <div>
@@ -16,7 +17,7 @@ export default function AppNavbar() {
                         <NavLink to="/" className="nav-link">Home</NavLink>
                         <NavLink to="courses" className="nav-link">Courses</NavLink>
                         {
-                            (user) ?
+                            (user.accessToken !== null) ?
                                 <NavLink to="logout" className="nav-link">Logout</NavLink>
                             :
                                 <>

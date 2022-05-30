@@ -1,8 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { Form, Button } from 'react-bootstrap'
 import Swal from "sweetalert2";
+import UserContext  from "../contexts/UserContext";
+import {Navigate, useNavigate} from 'react-router-dom'
 
 export default function Login() {
+    let navigate = useNavigate()
+    const {user, setUser} = useContext(UserContext)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -24,20 +28,70 @@ export default function Login() {
     function authenticate(event) {
         event.preventDefault()
 
-        localStorage.setItem('user_email', email)
-        localStorage.setItem('user_password', password)
+        fetch('http://localhost:4000/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            if(result.accessToken !== undefined){
+                localStorage.setItem('accessToken', result.accessToken)
 
-        setEmail('')
-        setPassword('')
+                setUser({
+                    accessToken: result.accessToken 
+                })
 
-        Swal.fire({
-            title: 'Success',
-            icon: 'success',
-            text: 'Logged in!'
+                Swal.fire({
+                    title: 'Success',
+                    icon: 'success',
+                    text: "You're logged in!"
+                })
+
+                fetch('http://localhost:4000/users/details', {
+                    headers: {
+                        Authorization: `Bearer ${result.accessToken}`
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if(result.is_admin === true){
+                        localStorage.setItem('isAdmin', result.is_admin)
+
+                        setUser({
+                            isAdmin: result.is_admin
+                        })
+
+                        navigate('/courses')
+                    }
+                    else{
+                        navigate('/')
+                    }
+                })
+            }
+            else {
+                Swal.fire({
+                    title: 'Error',
+                    icon: 'error',
+                    text: "Something went wrong"
+                })
+            }
+
+            setEmail('')
+            setPassword('')
         })
     }
 
     return (
+        (user.accessToken !== null) ? 
+            <Navigate to='/courses'></Navigate>
+        :
+
         <Form className='mt-5' onSubmit={authenticate}>
             <h1>Login</h1>
             <Form.Group>
