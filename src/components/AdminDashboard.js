@@ -8,7 +8,7 @@ export default function AdminDashboard(props){
 
 
     const updateCourse = (course_id) => {
-        fetch(`http://localhost:4000/courses/${course_id}/update`, {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/courses/${course_id}/update`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 export default function ArchiveCourse({ courseId, isActive, refreshData}) {
 
 	const archiveToggle = (courseId) => {
-		fetch(`http://localhost:4000/courses/${ courseId }/archive`,{
+		fetch(`${process.env.REACT_APP_API_BASE_URL}/courses/${ courseId }/archive`,{
 			method: 'PATCH',
 			headers: {
 				Authorization: `Bearer ${ localStorage.getItem('accessToken')}`

@@ -18,7 +18,7 @@ export default function AddCourse(props){
     const addCourse = (event) => {
         event.preventDefault()
 
-        fetch('http://localhost:4000/courses/create', {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/courses/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

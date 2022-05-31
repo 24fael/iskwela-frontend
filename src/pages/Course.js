@@ -13,7 +13,7 @@ export default function Course(){
     const [ price, setPrice ] = useState('')
 
     useEffect(() => {
-        fetch(`http://localhost:4000/courses/${id}`)
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/courses/${id}`)
         .then(response => response.json())
         .then(result => {
             setName(result.name) 
@@ -23,7 +23,7 @@ export default function Course(){
     }, [])
 
     const enroll = (course_id) => {
-        fetch(`http://localhost:4000/users/enroll`, {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/users/enroll`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ export default function CoursePage() {
     const {user} = useContext(UserContext)
 
     const getAllCourses = () => {
-        fetch('http://localhost:4000/courses/')
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/courses/`)
         .then(response => response.json())
         .then(result => {
             setAllCourses(result)
