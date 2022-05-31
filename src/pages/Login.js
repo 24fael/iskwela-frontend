@@ -28,7 +28,7 @@ export default function Login() {
     function authenticate(event) {
         event.preventDefault()
 
-        fetch('http://localhost:4000/users/login', {
+        fetch(`${process.env.API_BASE_URL}/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
