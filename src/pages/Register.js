@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {Form, Button} from 'react-bootstrap'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import UserContext from '../contexts/UserContext'
 
 export default function Register(){
     const { user } = useContext(UserContext)
+    let navigate = useNavigate()
 
+    let [firstName, setFirstName] = useState('')
+    let [lastName, setLastName] = useState('')
+    let [mobileNumber, setMobileNumber] = useState('')
     let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
     let [verifyPassword, setVerifyPassword] = useState('')
@@ -25,18 +29,38 @@ export default function Register(){
         }
     }, [email, password, verifyPassword])
 
-    function registerUser(e) {
-        e.preventDefault()
+    function registerUser(event) {
+        event.preventDefault()
 
-        // clear all fields
-        setEmail('')
-        setPassword('')
-        setVerifyPassword('')
+        fetch('http://localhost:4000/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                password: password,
+                mobile_number: mobileNumber
+            })
+        })
+        .then(response => {
+            Swal.fire({
+                title: 'Success',
+                icon: 'success',
+                text: 'Successfully registered! You may now log in.'
+            })
 
-        Swal.fire({
-            title: 'Congratulations!',
-            icon: 'success',
-            text: 'You have successfully registered.'
+            // clear all fields
+            setFirstName('')
+            setLastName('')
+            setMobileNumber('')
+            setEmail('')
+            setPassword('')
+            setVerifyPassword('')
+
+            navigate('/login')
         })
     }
 
@@ -47,6 +71,36 @@ export default function Register(){
         <React.Fragment>
             <h1>Register</h1>
             <Form onSubmit={e => registerUser(e)}>
+                <Form.Group>
+                    <Form.Label>First Name:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter your First Name"
+                        required
+                        value={firstName}
+                        onChange={(event) => {setFirstName(event.target.value)}}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Last Name:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter your Last Name"
+                        required
+                        value={lastName}
+                        onChange={(event) => {setLastName(event.target.value)}}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Mobile Number:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter your Mobile Number"
+                        required
+                        value={mobileNumber}
+                        onChange={(event) => {setMobileNumber(event.target.value)}}
+                    />
+                </Form.Group>
                 <Form.Group>
                     <Form.Label>Email:</Form.Label>
                     <Form.Control

@@ -1,19 +1,38 @@
 import React, {useState, useEffect} from "react";
-import {Table} from "react-bootstrap"
+import {Table, Button} from "react-bootstrap"
 import AddCourse from "./AddCourse";
+import ArchiveCourse from "./ArchiveCourseButton";
 
 export default function AdminDashboard(props){
     const [courses, setCourses] = useState([])
 
+
+    const updateCourse = (course_id) => {
+        fetch(`http://localhost:4000/courses/${course_id}/update`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({
+               
+            })
+        })
+    }
+
     useEffect(() => {
         const courses_array = props.courses.map(course => {
             return(
-                <tr key={course.id}>
+                <tr key={course._id}>
                     <td>{course._id}</td>
                     <td>{course.name}</td>
                     <td>{course.description}</td>
                     <td>{course.price}</td>
                     <td className={course.is_active ? 'text-success': 'text-danger'}>{course.is_active ? 'In Stock': 'Out of Stock'}</td>
+                    <td className="d-flex justify-content-evenly">
+                        <Button variant='secondary' onClick={updateCourse(course._id)}>Edit</Button>
+                        <ArchiveCourse courseId={course._id} isActive={course.is_active} refreshData={props.refreshData}/>
+                    </td>
                 </tr>
             )
         })

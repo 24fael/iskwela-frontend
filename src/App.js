@@ -4,6 +4,7 @@ import React, {useState} from 'react'
 import AppNavbar from './components/AppNavbar'
 import Home from './pages/Home';
 import CoursePage from './pages/CoursePage';
+import Course from './pages/Course';
 import { Container } from 'react-bootstrap';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -31,6 +32,7 @@ function App() {
           <Routes>
               <Route path='/' element={<Home/>}></Route>
               <Route path='courses' element={<CoursePage/>}></Route>
+              <Route path='courses/:id' element={<Course/>}></Route>
               <Route path='register' element={<Register/>}></Route>
               <Route path='login' element={<Login/>}></Route>
               <Route path='logout' element={<Logout/>}></Route>
