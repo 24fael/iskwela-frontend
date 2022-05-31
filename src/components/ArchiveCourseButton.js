@@ -33,7 +33,7 @@ export default function ArchiveCourse({ courseId, isActive, refreshData}) {
 	}
 
 	const activateToggle = (courseId) => {
-		fetch(`http://localhost:4000/courses/${ courseId }/activate`,{
+		fetch(`${process.env.REACT_APP_API_BASE_URL}/courses/${ courseId }/activate`,{
 			method: 'PATCH',
 			headers: {
 				Authorization: `Bearer ${ localStorage.getItem('accessToken')}`
